@@ -30,7 +30,7 @@ Developer ──push──▶ Git (GitHub)
 </p>
 <p>
 Learning roadmap
-
+----------------
 Each stage works on its own, so you always have something running.
 
 Stage 1: Launch the Jenkins EC2 and install Jenkins, Git, Terraform and Ansible.
@@ -45,6 +45,7 @@ Credentials: Jenkins needs your AWS keys and the SSH private key. These go in Je
 Webhook: GitHub must be able to reach Jenkins (port 8080 open to the internet). To begin with you can skip it and use “Poll SCM” or manual builds.
 Re-running: The second push will run terraform apply again. Terraform sees the EC2 already exists and changes nothing, and Ansible just updates index.html. This is called idempotency and it’s a key DevOps concept.
 Cost: Run terraform destroy when you finish a practice session.
+--------	
 </p>
 </body>
 </html>
