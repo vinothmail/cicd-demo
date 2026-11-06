@@ -1,9 +1,9 @@
 <html>
 <head><title>CI/CD Demo</title></head>
 <body>
-  <h2><font face=tahoma color=orange>Hello from my CI/CD pipeline! Version 3<font></h2>
+  <h2 style="font-family: Tahoma; color:turquoise;">Hello from my CI/CD pipeline! - verrsion 7</h2>
 <hr>
-	<p><font face=tahoma>
+	<p>
 <b>Suggested learning order</b>
 Create the EC2 manually in the AWS console, so you understand what Terraform automates.
 Do Phase 1 (Terraform only).
@@ -11,12 +11,12 @@ Do Phase 2 (Ansible only).
 Push to Git (Phase 3).
 Use the shell script (Phase 4A).
 Move to GitHub Actions (Phase 4B).
-</font></p>
-<p><font color=green><b>
-Learning roadmap </font><br></b>
+	</p>
+<b>
+<h3 style="font-family: Tahoma; color:teal;">Learning roadmap </h3><br></b>
 <hr>
 Each stage works on its own, so you always have something running.
-<br><font face=tahoma>
+<br>
 Stage 1: Launch the Jenkins EC2 and install Jenkins, Git, Terraform and Ansible.<br>
 Stage 2: Create the GitHub repo with index.html. Create a Jenkins job that pulls it (manual “Build Now”).<br>
 Stage 3: Add Terraform to the job so it creates the web EC2.<br>
@@ -25,7 +25,7 @@ Stage 5: Turn it into a Jenkinsfile (pipeline as code) with stages: Checkout →
 Stage 6: Add a GitHub webhook so a git push triggers it automatically.<br>
 Stage 7: Add Prometheus and Node Exporter for monitoring.<br>
 	<br>
-Things to know up front<br><hr>
+<h3 style="font-family: Tahoma; color:crimson;">Things to know up front</h3><br><hr>
 Credentials: Jenkins needs your AWS keys and the SSH private key. These go in Jenkins → Manage Credentials, never in Git. (Better still, attach an IAM role to the Jenkins EC2 so no keys are needed.)<br>
 Webhook: GitHub must be able to reach Jenkins (port 8080 open to the internet). To begin with you can skip it and use “Poll SCM” or manual builds.<br>
 Re-running: The second push will run terraform apply again. Terraform sees the EC2 already exists and changes nothing, and Ansible just updates index.html. This is called idempotency and it’s a key DevOps concept.<br>
