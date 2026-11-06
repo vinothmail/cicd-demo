@@ -1,7 +1,7 @@
 <html>
 <head><title>CI/CD Demo</title></head>
 <body>
-  <h2> <font color=navy>CI/CD pipeline </font> <font color=skyblue>- version 9</font></h2>
+  <h2> <font color=navy>CI/CD pipeline </font> <font color=skyblue>- version 10</font></h2>
 <hr>
 	<p>
 <b>Suggested learning order</b>
@@ -27,10 +27,10 @@ Stage 7: Add Prometheus and Node Exporter for monitoring.<br>
 	
 <h3><font color=crimson>Things to know up front</font></h3><hr>
 Credentials: Jenkins needs your AWS keys and the SSH private key. These go in Jenkins → Manage Credentials, never in Git. (Better still, attach an IAM role to the Jenkins EC2 so no keys are needed.)<br>
-Webhook: GitHub must be able to reach Jenkins (port 8080 open to the internet). To begin with you can skip it and use “Poll SCM” or manual builds.<br>
-Re-running: The second push will run terraform apply again. Terraform sees the EC2 already exists and changes nothing, and Ansible just updates index.html. This is called idempotency and it’s a key DevOps concept.<br>
+Webhook: GitHub must be able to reach Jenkins (port 8080 open to the internet). To begin with you can skip it and use "Poll SCM" or manual builds.<br>
+Re-running: The second push will run terraform apply again. Terraform sees the EC2 already exists and changes nothing, and Ansible just updates index.html. This is called idempotency and it's a key DevOps concept.<br>
 Cost: Run terraform destroy when you finish a practice session.<br>
---------	
+<font color=gray>***</font>font>	
 </p>
 </body>
 </html>
