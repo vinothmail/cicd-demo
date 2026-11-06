@@ -45,6 +45,13 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["172.31.0.0/16"]   # only machines inside your VPC, such as Jenkins
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -66,4 +73,8 @@ resource "aws_instance" "web" {
 
 output "web_public_ip" {
   value = aws_instance.web.public_ip
+}
+
+output "web_private_ip" {
+  value = aws_instance.web.private_ip
 }
