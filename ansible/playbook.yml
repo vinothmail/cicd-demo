@@ -1,0 +1,38 @@
+---
+- name: Configure web server
+  hosts: web
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Wait until the server accepts SSH
+      ansible.builtin.wait_for_connection:
+        delay: 5
+        timeout: 180
+
+    - name: Gather facts
+      ansible.builtin.setup:
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Deploy index.html from the Git repo
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../index.html"
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Make sure nginx is running and starts on boot
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
