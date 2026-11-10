@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('terraform') {
                     sh '''
-                        terraform init -input=false
+                        terraform init -input=false -migrate-state -force-copy
                         terraform validate
                         terraform plan -input=false
                         terraform apply -input=false -auto-approve
