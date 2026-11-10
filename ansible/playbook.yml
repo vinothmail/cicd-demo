@@ -36,3 +36,14 @@
         name: nginx
         state: started
         enabled: true
+
+    - name: Install Node Exporter
+      ansible.builtin.apt:
+        name: prometheus-node-exporter
+        state: present
+
+    - name: Make sure Node Exporter is running and starts on boot
+      ansible.builtin.service:
+        name: prometheus-node-exporter
+        state: started
+        enabled: true
