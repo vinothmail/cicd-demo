@@ -1,38 +1,85 @@
+<!DOCTYPE html>
 <html>
-<head><title>CI/CD Pipeline - version 19</title></head>
+<head>
+    <title>CI/CD Pipeline - Version 20.1</title>
+
+    <style>
+        body {
+            font-family: Tahoma, sans-serif;
+            color: black;
+            margin: 20px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            text-align: center;
+            color: royalblue;
+        }
+
+        h2 {
+            text-align: center;
+            color: forestgreen;
+        }
+
+        .suggested-learning {
+            color: mediumseagreen;
+        }
+
+        .roadmap {
+            color: teal;
+        }
+
+        .notes {
+            color: olive;
+        }
+
+        .separator {
+            color: lightgreen;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
 <body>
-	<h1><font color=green>CI/CD Pipeline</font></h1>
-  <h2> <font color=brown>Demo Project</font> </h2>
-	<b><h3><font face=Tahoma color=coral>Suggested learning order</font></h3></b>
-	<hr>
-	<font face=Tahoma>
-Create the EC2 manually in the AWS console, so you understand what Terraform automates.<br>
-Do Phase 1 (Terraform only).<br>
-Do Phase 2 (Ansible only).<br>
-Push to Git (Phase 3).<br>
-Use the shell script (Phase 4A).<br>
-Move to GitHub Actions (Phase 4B).
-	</p></font>
-<b>
-<h3><font face=Tahoma color=teal>Learning roadmap </font></h3></b>
-<hr><font face=Tahoma>
-Each stage works on its own, so you always have something running.
-<br>
-Stage 1: Launch the Jenkins EC2 and install Jenkins, Git, Terraform and Ansible.<br>
-Stage 2: Create the GitHub repo with index.html. Create a Jenkins job that pulls it (manual "Build Now").<br>
-Stage 3: Add Terraform to the job so it creates the web EC2.<br>
-Stage 4: Add Ansible so it installs nginx and deploys index.html.<br>
-Stage 5: Turn it into a Jenkinsfile (pipeline as code) with stages: Checkout -> Terraform -> Ansible.<br>
-Stage 6: Add a GitHub webhook so a git push triggers it automatically.<br>
-Stage 7: Add Prometheus and Node Exporter for monitoring.<br>
-</font>
-<h3><font color=olive face=Tahoma>Things to know up front</font></h3><hr>
-	<font face=Tahoma>
-Credentials: Jenkins needs your AWS keys and the SSH private key. These go in Jenkins -> Manage Credentials, never in Git. (Better still, attach an IAM role to the Jenkins EC2 so no keys are needed.)<br>
-Webhook: GitHub must be able to reach Jenkins (port 8080 open to the internet). To begin with you can skip it and use "Poll SCM" or manual builds.<br>
-Re-running: The second push will run terraform apply again. Terraform sees the EC2 already exists and changes nothing, and Ansible just updates index.html. This is called idempotency and it's a key DevOps concept.<br>
-Cost: Run terraform destroy when you finish a practice session.<br></font>
-<font color=lightgreen>***</font>	
-</p>
-</body>
-</html>
+
+    <h1>CI/CD Pipeline</h1>
+
+    <h2>Demo Project</h2>
+
+    <h3 class="suggested-learning">Suggested Learning Order</h3>
+    <hr>
+
+    Create the EC2 manually in the AWS console, so you understand what Terraform automates.<br>
+    Do Phase 1 (Terraform only).<br>
+    Do Phase 2 (Ansible only).<br>
+    Push to Git (Phase 3).<br>
+    Use the shell script (Phase 4A).<br>
+    Move to GitHub Actions (Phase 4B).
+
+    <h3 class="roadmap">Learning Roadmap</h3>
+    <hr>
+
+    Each stage works on its own, so you always have something running.<br>
+    Stage 1: Launch the Jenkins EC2 and install Jenkins, Git, Terraform and Ansible.<br>
+    Stage 2: Create the GitHub repo with index.html. Create a Jenkins job that pulls it (manual "Build Now").<br>
+    Stage 3: Add Terraform to the job so it creates the web EC2.<br>
+    Stage 4: Add Ansible so it installs nginx and deploys index.html.<br>
+    Stage 5: Turn it into a Jenkinsfile (pipeline as code) with stages: Checkout → Terraform → Ansible.<br>
+    Stage 6: Add a GitHub webhook so a git push triggers it automatically.<br>
+    Stage 7: Add Prometheus and Node Exporter for monitoring.<br>
+
+    <h3 class="notes">Things to Know Up Front</h3>
+    <hr>
+
+    <strong>Credentials:</strong>
+    Jenkins needs your AWS keys and the SSH private key. These go in Jenkins → Manage Credentials, never in Git.
+    (Better still, attach an IAM role to the Jenkins EC2 so no keys are needed.)<br><br>
+
+    <strong>Webhook:</strong>
+    GitHub must be able to reach Jenkins (port 8080 open to the internet). To begin with you can skip it and use "Poll SCM" or manual builds.<br><br>
+
+    <strong>Re-running:</strong>
+    The second push will run terraform apply again. Terraform sees the EC2 already exists and changes nothing, and Ansible just updates index.html. This is called idempotency and it's a key DevOps concept.<br><br>
+
+    <strong>Cost:</strong>
+    Run
