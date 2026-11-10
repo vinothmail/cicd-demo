@@ -44,6 +44,16 @@ pipeline {
                 '''
             }
         }
+
+        stage('Register monitoring') {
+            steps {
+                sh '''
+                    WEB_PRIVATE_IP=$(terraform -chdir=terraform output -raw web_private_ip)
+                    echo "Registering $WEB_PRIVATE_IP:9100 with Prometheus"
+                    printf '[{"targets": ["%s:9100"], "labels": {"server": "web-server"}}]\\n' "$WEB_PRIVATE_IP" > /etc/prometheus/targets/web.json
+                '''
+            }
+        }
     }
 
     post {
