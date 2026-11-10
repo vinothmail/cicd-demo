@@ -6,7 +6,7 @@ terraform {
     }
   }
  backend "s3" {
-    bucket       = "YOUR-BUCKET"
+    bucket       = "vinoth-cicd-tfstate-101126"
     key          = "cicd-demo/terraform.tfstate"
     region       = "ap-south-1"
     use_lockfile = true
