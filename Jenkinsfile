@@ -19,15 +19,31 @@ pipeline {
             }
         }
 
-        stage('Terraform') {
+        stage('Terraform plan') {
             steps {
                 dir('terraform') {
                     sh '''
-                        terraform init -input=false 
+                        terraform init -input=false
                         terraform validate
-                        terraform plan -input=false
-                        terraform apply -input=false -auto-approve
+                        terraform plan -input=false -out=tfplan
                     '''
+                }
+            }
+        }
+
+        stage('Approval') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    input message: 'Review the Terraform plan in the console log. Deploy?',
+                          ok: 'Deploy'
+                }
+            }
+        }
+
+        stage('Terraform apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -input=false tfplan'
                 }
             }
         }
@@ -62,6 +78,9 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed. Check the stage that turned red.'
+        }
+        aborted {
+            echo 'Deployment was not approved, or the approval timed out. Nothing was changed.'
         }
     }
 }
