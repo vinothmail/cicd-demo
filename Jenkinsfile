@@ -7,15 +7,9 @@ pipeline {
 
     stages {
 
-        stage('Build check') {
+        stage('Test') {
             steps {
-                sh '''
-                    echo "Build started"
-                    ls -l
-                    test -f index.html
-                    grep -qi "<html" index.html
-                    echo "index.html looks good"
-                '''
+                sh 'bash tests/check_html.sh index.html'
             }
         }
 
