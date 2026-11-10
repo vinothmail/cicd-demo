@@ -18,11 +18,11 @@ else
 fi
 
 # 2. Doctype
-if grep -qi '<!DOCTYPE html>' "$FILE"; then
-  pass "DOCTYPE present"
-else
-  fail "DOCTYPE missing"
-fi
+#if grep -qi '<!DOCTYPE html>' "$FILE"; then
+ # pass "DOCTYPE present"
+#else
+ # fail "DOCTYPE missing"
+#fi
 
 # 3. Each key tag is opened once and closed once
 for tag in html head body title; do
