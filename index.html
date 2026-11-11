@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CI/CD Pipeline - Version 20.2</title>
+    <title>CI/CD Pipeline - Version 20.3</title>
 
     <style>
         body {
@@ -64,7 +64,7 @@
     Stage 2: Create the GitHub repo with index.html. Create a Jenkins job that pulls it (manual "Build Now").<br>
     Stage 3: Add Terraform to the job so it creates the web EC2.<br>
     Stage 4: Add Ansible so it installs nginx and deploys index.html.<br>
-    Stage 5: Turn it into a Jenkinsfile (pipeline as code) with stages: Checkout → Terraform → Ansible.<br>
+    Stage 5: Turn it into a Jenkinsfile (pipeline as code) with stages: Checkout -> Terraform -> Ansible.<br>
     Stage 6: Add a GitHub webhook so a git push triggers it automatically.<br>
     Stage 7: Add Prometheus and Node Exporter for monitoring.<br>
 
