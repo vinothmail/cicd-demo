@@ -68,14 +68,15 @@ pipeline {
                 sh '''
                     WEB_IP=$(terraform -chdir=terraform output -raw web_public_ip)
                     echo "Web server IP: $WEB_IP"
+                    echo "Deploying image: $IMAGE_NAME:$BUILD_NUMBER"
 
                     printf "[web]\\n%s ansible_user=ubuntu ansible_ssh_private_key_file=/var/lib/jenkins/.ssh/devops-key\\n" "$WEB_IP" > ansible/inventory.ini
 
-                    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
+                    ansible-playbook -i ansible/inventory.ini ansible/playbook.yml \
+                        -e "app_image=$IMAGE_NAME:$BUILD_NUMBER"
                 '''
             }
         }
-
         stage('Register monitoring') {
             steps {
                 sh '''
