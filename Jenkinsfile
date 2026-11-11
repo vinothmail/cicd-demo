@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         ANSIBLE_HOST_KEY_CHECKING = 'False'
+        IMAGE_NAME = 'vinothmail/cicd-demo'
     }
 
     stages {
@@ -10,6 +11,26 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'bash tests/check_html.sh index.html'
+            }
+        }
+
+        stage('Docker build') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER .'
+            }
+        }
+
+        stage('Docker push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                                                  usernameVariable: 'DH_USER',
+                                                  passwordVariable: 'DH_TOKEN')]) {
+                    sh '''
+                        echo "$DH_TOKEN" | docker login -u "$DH_USER" --password-stdin
+                        docker push $IMAGE_NAME:$BUILD_NUMBER
+                        docker logout
+                    '''
+                }
             }
         }
 
@@ -67,8 +88,11 @@ pipeline {
     }
 
     post {
+        always {
+            sh 'docker image prune -f || true'
+        }
         success {
-            echo 'Pipeline succeeded. Open the web server IP in your browser.'
+            echo 'Pipeline succeeded.'
         }
         failure {
             echo 'Pipeline failed. Check the stage that turned red.'
