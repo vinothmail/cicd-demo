@@ -18,24 +18,46 @@
         update_cache: true
         cache_valid_time: 3600
 
-    - name: Install nginx
+    - name: Remove nginx from the server (it now lives inside the container)
       ansible.builtin.apt:
-        name: nginx
+        name:
+          - nginx
+          - nginx-common
+        state: absent
+        purge: true
+
+    - name: Install Docker and the Python Docker library
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - python3-docker
         state: present
 
-    - name: Deploy index.html from the Git repo
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../index.html"
-        dest: /var/www/html/index.html
-        owner: www-data
-        group: www-data
-        mode: "0644"
-
-    - name: Make sure nginx is running and starts on boot
+    - name: Make sure Docker is running and starts on boot
       ansible.builtin.service:
-        name: nginx
+        name: docker
         state: started
         enabled: true
+
+    - name: Run the app container
+      community.docker.docker_container:
+        name: webapp
+        image: "{{ app_image }}"
+        pull: true
+        state: started
+        recreate: true
+        restart_policy: always
+        published_ports:
+          - "80:80"
+
+    - name: Check the site answers on port 80
+      ansible.builtin.uri:
+        url: http://localhost:80
+        status_code: 200
+      register: site
+      retries: 10
+      delay: 3
+      until: site.status == 200
 
     - name: Install Node Exporter
       ansible.builtin.apt:
