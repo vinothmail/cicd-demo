@@ -3,3 +3,4 @@
 *.tfstate.backup
 ansible/inventory.ini
 tfplan
+ansible/k3s_inventory.ini
