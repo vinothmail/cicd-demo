@@ -33,7 +33,28 @@ pipeline {
                 }
             }
         }
+        stage('Kubernetes cluster') {
+            steps {
+                sh '''
+                    K3S_SERVER=$(terraform -chdir=terraform output -raw k3s_server_private_ip)
+                    WORKERS=$(terraform -chdir=terraform output -json k3s_worker_private_ips | jq -r '.[]')
+                    SSH_OPTS="ansible_user=ubuntu ansible_ssh_private_key_file=/var/lib/jenkins/.ssh/devops-key"
 
+                    {
+                        echo "[k3s_server]"
+                        echo "$K3S_SERVER $SSH_OPTS"
+                        echo "[k3s_workers]"
+                        for w in $WORKERS; do echo "$w $SSH_OPTS"; done
+                    } > ansible/k3s_inventory.ini
+
+                    cat ansible/k3s_inventory.ini
+                    ansible-playbook -i ansible/k3s_inventory.ini ansible/k3s.yml
+
+                    kubectl --kubeconfig /var/lib/jenkins/.kube/k3s-config get nodes -o wide
+                '''
+            }
+        }
+      
         stage('Terraform plan') {
             steps {
                 dir('terraform') {
