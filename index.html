@@ -8,12 +8,12 @@
             font-family: Tahoma, sans-serif;
             color: black;
             margin: 20px;
-            line-height: 1.6;
+            line-height: 1.2;
         }
 
         h1 {
             text-align: center;
-            color: burgundy;
+            color: coral;
         }
 
         h2 {
@@ -48,7 +48,6 @@
 
     <h3 class="suggested-learning">Suggested Learning Order</h3>
     <hr>
-
     Create the EC2 manually in the AWS console, so you understand what Terraform automates.<br>
     Do Phase 1 (Terraform only).<br>
     Do Phase 2 (Ansible only).<br>
@@ -58,7 +57,6 @@
 
     <h3 class="roadmap">Learning Roadmap</h3>
     <hr>
-
     Each stage works on its own, so you always have something running.<br>
     Stage 1: Launch the Jenkins EC2 and install Jenkins, Git, Terraform and Ansible.<br>
     Stage 2: Create the GitHub repo with index.html. Create a Jenkins job that pulls it (manual "Build Now").<br>
@@ -70,7 +68,6 @@
 
     <h3 class="notes">Things to Know Up Front</h3>
     <hr>
-
     <strong>Credentials:</strong>
     Jenkins needs your AWS keys and the SSH private key. These go in Jenkins > Manage Credentials, never in Git.
     (Better still, attach an IAM role to the Jenkins EC2 so no keys are needed.)<br><br>
