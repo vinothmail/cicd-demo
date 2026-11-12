@@ -1,0 +1,104 @@
+---
+- name: Install the k3s server
+  hosts: k3s_server
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Wait until the server accepts SSH
+      ansible.builtin.wait_for_connection:
+        delay: 5
+        timeout: 180
+
+    - name: Install k3s server (Traefik disabled, we use a NodePort)
+      ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -s - server --disable traefik
+      args:
+        executable: /bin/bash
+        creates: /etc/systemd/system/k3s.service
+
+    - name: Wait for the node token to exist
+      ansible.builtin.wait_for:
+        path: /var/lib/rancher/k3s/server/node-token
+        timeout: 120
+
+    - name: Read the node token
+      ansible.builtin.slurp:
+        src: /var/lib/rancher/k3s/server/node-token
+      register: token_file
+      no_log: true
+
+    - name: Remember the token for the workers
+      ansible.builtin.set_fact:
+        k3s_token: "{{ token_file.content | b64decode | trim }}"
+      no_log: true
+
+    - name: Wait for the Kubernetes API to answer
+      ansible.builtin.command: k3s kubectl get nodes
+      register: api
+      retries: 20
+      delay: 6
+      until: api.rc == 0
+      changed_when: false
+
+    - name: Create the .kube folder on Jenkins
+      ansible.builtin.file:
+        path: /var/lib/jenkins/.kube
+        state: directory
+        mode: "0700"
+      delegate_to: localhost
+      become: false
+
+    - name: Fetch the kubeconfig to Jenkins
+      ansible.builtin.fetch:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: /var/lib/jenkins/.kube/k3s-config
+        flat: true
+
+    - name: Point the kubeconfig at the server's private IP
+      ansible.builtin.replace:
+        path: /var/lib/jenkins/.kube/k3s-config
+        regexp: 'https://127.0.0.1:6443'
+        replace: 'https://{{ inventory_hostname }}:6443'
+      delegate_to: localhost
+      become: false
+
+    - name: Make the kubeconfig readable only by Jenkins
+      ansible.builtin.file:
+        path: /var/lib/jenkins/.kube/k3s-config
+        mode: "0600"
+      delegate_to: localhost
+      become: false
+
+- name: Join the workers to the cluster
+  hosts: k3s_workers
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Wait until the worker accepts SSH
+      ansible.builtin.wait_for_connection:
+        delay: 5
+        timeout: 180
+
+    - name: Install the k3s agent
+      ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -s - agent
+      args:
+        executable: /bin/bash
+        creates: /etc/systemd/system/k3s-agent.service
+      environment:
+        K3S_URL: "https://{{ groups['k3s_server'][0] }}:6443"
+        K3S_TOKEN: "{{ hostvars[groups['k3s_server'][0]].k3s_token }}"
+
+- name: Wait for every node to be Ready
+  hosts: k3s_server
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Wait until all nodes are Ready
+      ansible.builtin.command: k3s kubectl wait --for=condition=Ready node --all --timeout=60s
+      register: ready
+      retries: 6
+      delay: 10
+      until: ready.rc == 0
+      changed_when: false
