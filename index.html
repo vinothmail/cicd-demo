@@ -13,7 +13,7 @@
 
         h1 {
             text-align: center;
-            color: royalblue;
+            color: burgundy;
         }
 
         h2 {
@@ -64,7 +64,7 @@
     Stage 2: Create the GitHub repo with index.html. Create a Jenkins job that pulls it (manual "Build Now").<br>
     Stage 3: Add Terraform to the job so it creates the web EC2.<br>
     Stage 4: Add Ansible so it installs nginx and deploys index.html.<br>
-    Stage 5: Turn it into a Jenkinsfile (pipeline as code) with stages: Checkout -> Terraform -> Ansible.<br>
+    Stage 5: Turn it into a Jenkinsfile (pipeline as code) with stages: Checkout > Terraform > Ansible.<br>
     Stage 6: Add a GitHub webhook so a git push triggers it automatically.<br>
     Stage 7: Add Prometheus and Node Exporter for monitoring.<br>
 
@@ -72,7 +72,7 @@
     <hr>
 
     <strong>Credentials:</strong>
-    Jenkins needs your AWS keys and the SSH private key. These go in Jenkins → Manage Credentials, never in Git.
+    Jenkins needs your AWS keys and the SSH private key. These go in Jenkins > Manage Credentials, never in Git.
     (Better still, attach an IAM role to the Jenkins EC2 so no keys are needed.)<br><br>
 
     <strong>Webhook:</strong>
